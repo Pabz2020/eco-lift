@@ -1,8 +1,64 @@
-import React from 'react';
-import './Contact.css'; // New stylesheet
+import React, { useState, useRef } from 'react';
+import emailjs from '@emailjs/browser';
+import './Contact.css';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaHeadset, FaGlobe } from 'react-icons/fa';
 
 export default function Contact() {
+  const form = useRef();
+  const [formData, setFormData] = useState({
+    user_name: '',
+    user_email: '',
+    user_phone: '',
+    service_type: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    // EmailJS configuration
+    const serviceId = 'YOUR_EMAILJS_SERVICE_ID'; // Replace with your EmailJS service ID
+    const templateId = 'YOUR_EMAILJS_TEMPLATE_ID'; // Replace with your EmailJS template ID
+    const publicKey = 'YOUR_EMAILJS_PUBLIC_KEY'; // Replace with your EmailJS public key
+    
+    // Add recipient email to form data
+    const formDataWithRecipient = {
+      ...formData,
+      to_email: 'ishankendawela@gmail.com'
+    };
+
+    emailjs.sendForm(serviceId, templateId, form.current, publicKey)
+      .then((result) => {
+        console.log('SUCCESS!', result.text);
+        setSubmitStatus('success');
+        setFormData({
+          user_name: '',
+          user_email: '',
+          user_phone: '',
+          service_type: '',
+          message: ''
+        });
+      }, (error) => {
+        console.log('FAILED...', error.text);
+        setSubmitStatus('error');
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
+  };
+
   return (
     <div className="contact-page">
       <header className="contact-header" data-aos="fade-in">
@@ -28,7 +84,7 @@ export default function Contact() {
               </div>
               <div className="contact-info-content">
                 <h3>Phone Number</h3>
-                <p>+123 456 7890</p>
+                <p>+94 764948887</p>
                 <span className="contact-note">Call us anytime</span>
               </div>
             </div>
@@ -39,7 +95,7 @@ export default function Contact() {
               </div>
               <div className="contact-info-content">
                 <h3>Email Address</h3>
-                <p>ecolift@gmail.com</p>
+                <p>ishankendawela@gmail.com</p>
                 <span className="contact-note">We'll respond quickly</span>
               </div>
             </div>
@@ -71,18 +127,57 @@ export default function Contact() {
         <div className="contact-form-container" data-aos="fade-left">
           <h2>Send Us a Message</h2>
           <p className="form-intro">Tell us about your waste management needs and we'll provide a customized solution.</p>
-          <form className="contact-form">
+          
+          {submitStatus === 'success' && (
+            <div className="success-message">
+              <FaEnvelope className="success-icon" />
+              <p>Thank you! Your message has been sent successfully. We'll get back to you within 24 hours.</p>
+            </div>
+          )}
+          
+          {submitStatus === 'error' && (
+            <div className="error-message">
+              <p>Sorry! There was an error sending your message. Please try again or contact us directly.</p>
+            </div>
+          )}
+
+          <form ref={form} className="contact-form" onSubmit={handleSubmit}>
             <div className="form-group">
-              <input type="text" placeholder="Your Full Name" required />
+              <input 
+                type="text" 
+                name="user_name"
+                placeholder="Your Full Name" 
+                value={formData.user_name}
+                onChange={handleInputChange}
+                required 
+              />
             </div>
             <div className="form-group">
-              <input type="email" placeholder="Your Email Address" required />
+              <input 
+                type="email" 
+                name="user_email"
+                placeholder="Your Email Address" 
+                value={formData.user_email}
+                onChange={handleInputChange}
+                required 
+              />
             </div>
             <div className="form-group">
-              <input type="tel" placeholder="Your Phone Number" />
+              <input 
+                type="tel" 
+                name="user_phone"
+                placeholder="Your Phone Number" 
+                value={formData.user_phone}
+                onChange={handleInputChange}
+              />
             </div>
             <div className="form-group">
-              <select required>
+              <select 
+                name="service_type"
+                value={formData.service_type}
+                onChange={handleInputChange}
+                required
+              >
                 <option value="">Select Service Type</option>
                 <option value="recycling">Recycling Services</option>
                 <option value="ewaste">E-Waste Collection</option>
@@ -92,11 +187,18 @@ export default function Contact() {
               </select>
             </div>
             <div className="form-group">
-              <textarea placeholder="Tell us about your requirements..." rows="6" required></textarea>
+              <textarea 
+                name="message"
+                placeholder="Tell us about your requirements..." 
+                rows="6" 
+                value={formData.message}
+                onChange={handleInputChange}
+                required
+              ></textarea>
             </div>
-            <button type="submit">
+            <button type="submit" disabled={isSubmitting}>
               <FaEnvelope className="button-icon" />
-              Send Message
+              {isSubmitting ? 'Sending...' : 'Send Message'}
             </button>
           </form>
         </div>
@@ -104,15 +206,15 @@ export default function Contact() {
 
       <div className="map-container" data-aos="fade-up">
         <h2>Find Us</h2>
-        <p>Visit our office in the beautiful city of Galle, Sri Lanka</p>
+        <p>Visit our office in Hapugala, Galle, Sri Lanka</p>
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3967.2345678901234!2d80.218569314789!3d6.053516995585!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae173d78c000001%3A0x23c9a2a7b6a0a0e!2sGalle%2C%20Sri%20Lanka!5e0!3m2!1sen!2slk!4v1620912185569!5m2!1sen!2slk"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3967.2345678901234!2d80.218569314789!3d6.053516995585!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae173d78c000001%3A0x23c9a2a7b6a0a0e!2sHapugala%2C%20Galle%2C%20Sri%20Lanka!5e0!3m2!1sen!2slk!4v1620912185569!5m2!1sen!2slk"
           width="100%"
           height="450"
           style={{ border: 0 }}
           allowFullScreen=""
           loading="lazy"
-          title="Google Maps Location of Galle, Sri Lanka"
+          title="Google Maps Location of Hapugala, Galle, Sri Lanka"
         ></iframe>
       </div>
     </div>

@@ -134,7 +134,7 @@ class _CustomerRegistrationCompleteState extends State<CustomerRegistrationCompl
                     onPressed: () {
                       Navigator.pushNamedAndRemoveUntil(
                         context,
-                        '/login_role_selection',
+                        '/login',
                         (route) => false,
                       );
                     },

@@ -1,9 +1,11 @@
 import 'package:eco_lift/screens/view_pickup_location.dart';
 import 'package:eco_lift/screens/view_pickup_requests_details_screen.dart';
+import 'package:eco_lift/screens/collector_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:intl/intl.dart';
 import 'package:eco_lift/services/pickup_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CollectorHomeScreen extends StatefulWidget {
   const CollectorHomeScreen({
@@ -69,14 +71,13 @@ class _CollectorHomeScreenState extends State<CollectorHomeScreen> {
             duration: Duration(seconds: 2),
           ),
         );
-      }
 
-      // Navigator.pushNamedAndRemoveUntil(
-      //   context,
-      //   '/collector_dashboard',
-      //   (route) => false,
-      //   arguments: {'initialIndex': 1},
-      // );
+        // Navigate to activities tab (index 1) after successful acceptance
+        final dashboardState = CollectorDashboard.of(context);
+        if (dashboardState != null) {
+          dashboardState.selectTab(1);
+        }
+      }
     } catch (e) {
       setState(() {
         _processingRequests.remove(requestId);
@@ -165,6 +166,10 @@ class _CollectorHomeScreenState extends State<CollectorHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // final prefs = SharedPreferences.getInstance().then((prefs) async {
+    //   print('auth token: ${prefs.getString('auth_token')}'); // Pri
+    // });
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       body: _isLoading

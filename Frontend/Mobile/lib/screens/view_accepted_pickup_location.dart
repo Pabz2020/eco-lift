@@ -34,10 +34,13 @@ class _ViewAcceptedPickupLocationScreenState
   List<LatLng> _routePoints = [];
   bool _isLoadingRoute = false;
   bool _isProcessing = false;
+  bool _isLoadingLocation = false;
+  String _currentStatus = '';
 
   @override
   void initState() {
     super.initState();
+    _currentStatus = widget.currentStatus;
     _initializeLocations();
   }
 
@@ -51,26 +54,49 @@ class _ViewAcceptedPickupLocationScreenState
   }
 
   Future<void> _getCurrentPosition() async {
+    setState(() {
+      _isLoadingLocation = true;
+    });
+
     try {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) return;
+      if (!serviceEnabled) {
+        setState(() {
+          _isLoadingLocation = false;
+        });
+        return;
+      }
 
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) return;
+        if (permission == LocationPermission.denied) {
+          setState(() {
+            _isLoadingLocation = false;
+          });
+          return;
+        }
       }
 
-      if (permission == LocationPermission.deniedForever) return;
+      if (permission == LocationPermission.deniedForever) {
+        setState(() {
+          _isLoadingLocation = false;
+        });
+        return;
+      }
 
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.best);
 
       setState(() {
         _currentPosition = LatLng(position.latitude, position.longitude);
+        _isLoadingLocation = false;
       });
     } catch (e) {
       print('Error getting current position: $e');
+      setState(() {
+        _isLoadingLocation = false;
+      });
     }
   }
 
@@ -204,7 +230,13 @@ class _ViewAcceptedPickupLocationScreenState
         widget.pickupRequestId,
         "In Progress",
       );
-      Navigator.pop(context);
+
+      // Update the local status instead of popping the context
+      setState(() {
+        // Update the widget's currentStatus by creating a new widget with updated status
+        // Since we can't modify widget properties directly, we'll use a local variable
+        _currentStatus = "In Progress";
+      });
 
       // Show confirmation / Snackbar
       ScaffoldMessenger.of(context).showSnackBar(
@@ -367,18 +399,18 @@ class _ViewAcceptedPickupLocationScreenState
                                 color: Colors.black87),
                           ),
                         ),
-                       // IconButton(
-                       // onPressed: () {
-                           // ScaffoldMessenger.of(context).showSnackBar(
-                            //  SnackBar(
-                             //   content: Text(
-                              //      'Calling ${widget.customerDetails['phone']}'),
-                              //  duration: const Duration(seconds: 2),
-                            //  ),
-                          //  );
+                        // IconButton(
+                        // onPressed: () {
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //  SnackBar(
+                        //   content: Text(
+                        //      'Calling ${widget.customerDetails['phone']}'),
+                        //  duration: const Duration(seconds: 2),
+                        //  ),
+                        //  );
                         //  },
                         //  icon: const Icon(Icons.phone, color: Colors.green),
-                       // ),
+                        // ),
                       ],
                     ),
                     const SizedBox(height: 8),
@@ -473,13 +505,14 @@ class _ViewAcceptedPickupLocationScreenState
           ),
 
           // Action button at bottom
-          if (widget.currentStatus.toLowerCase() == 'accepted')
+          if (_currentStatus.toLowerCase() == 'accepted')
             Positioned(
               bottom: 40,
               left: 16,
               right: 16,
               child: ElevatedButton.icon(
-                onPressed: _isProcessing ? null : _startPickup,
+                onPressed:
+                    (_isProcessing || _isLoadingLocation) ? null : _startPickup,
                 icon: _isProcessing
                     ? const SizedBox(
                         height: 16,
@@ -489,9 +522,22 @@ class _ViewAcceptedPickupLocationScreenState
                             valueColor:
                                 AlwaysStoppedAnimation<Color>(Colors.white)),
                       )
-                    : const Icon(Icons.local_shipping, color: Colors.white),
+                    : _isLoadingLocation
+                        ? const SizedBox(
+                            height: 16,
+                            width: 16,
+                            child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white)),
+                          )
+                        : const Icon(Icons.local_shipping, color: Colors.white),
                 label: Text(
-                  _isProcessing ? 'Starting...' : 'Start Pickup',
+                  _isProcessing
+                      ? 'Starting...'
+                      : _isLoadingLocation
+                          ? 'Getting Location...'
+                          : 'Start Pickup',
                   style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -505,7 +551,7 @@ class _ViewAcceptedPickupLocationScreenState
                 ),
               ),
             )
-          else if (widget.currentStatus.toLowerCase() == 'in progress')
+          else if (_currentStatus.toLowerCase() == 'in progress')
             Positioned(
               bottom: 40,
               left: 16,

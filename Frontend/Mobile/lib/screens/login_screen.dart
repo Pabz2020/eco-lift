@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -17,7 +18,6 @@ class _LoginScreenState extends State<LoginScreen>
   bool _obscurePassword = true;
   bool _isLoading = false;
   String? _errorMessage;
-  late String _role;
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -42,11 +42,6 @@ class _LoginScreenState extends State<LoginScreen>
     ));
     _controller.forward();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _role =
-          ModalRoute.of(context)?.settings.arguments as String? ?? 'customer';
-      setState(() {});
-    });
   }
 
   @override
@@ -68,21 +63,19 @@ class _LoginScreenState extends State<LoginScreen>
         final apiService = ApiService();
         final response = await apiService.login(
           _emailController.text.trim(),
-          _passwordController.text,
-          _role,
+          _passwordController.text
         );
         print('login fcm token: ${response['fcmToken']}');
 
         if (!mounted) return;
 
         if (response['success']) {
-          // Store the authentication token
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setString('auth_token', response['token']);
-
+          // Store user data using AuthService
+          await AuthService.storeUserData(response['token'], response['user']);
+          final role = response['user']['role'];
           Navigator.pushReplacementNamed(
             context,
-            _role == 'customer'
+            role == 'customer'
                 ? '/customer_dashboard'
                 : '/collector_dashboard',
             arguments: response['user'],

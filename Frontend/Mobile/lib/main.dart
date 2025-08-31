@@ -8,15 +8,13 @@ import 'package:eco_lift/screens/collector_profile.dart';
 import 'package:eco_lift/screens/collector_wallet.dart';
 import 'package:eco_lift/screens/customer_activities.dart';
 import 'package:eco_lift/screens/customer_notification.dart';
-import 'package:eco_lift/services/customer_notification_service.dart';
-import 'package:eco_lift/services/notification_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'screens/welcome_page.dart';
+import 'screens/auth_splash_screen.dart';
 import 'screens/about_app.dart';
 import 'screens/role_selection.dart';
 import 'screens/customer_personal_info.dart';
@@ -28,10 +26,7 @@ import 'screens/collector_vehicle.dart';
 import 'screens/collector_waste_types.dart';
 import 'screens/collector_password.dart';
 import 'screens/collector_registration_success.dart';
-import 'screens/customer_welcome.dart';
 import 'screens/customer_registration_complete.dart';
-import 'screens/collector_welcome.dart';
-import 'screens/login_role_selection.dart';
 import 'screens/login_screen.dart';
 import 'screens/customer_dashboard.dart';
 import 'screens/customer_profile.dart';
@@ -62,9 +57,8 @@ void main() async {
   runApp(const EcoLiftApp());
 
   // Initialize notification services after runApp
-  // Only initialize the service based on user type
-  // You should determine user type from your app state/preferences
-  await _initializeNotificationServices();
+  // We'll initialize them when the user is authenticated
+  // await _initializeNotificationServices();
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -92,34 +86,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 }
 
-Future<void> _initializeNotificationServices() async {
-  // Get user type from your app's state management or shared preferences
-  final userType =
-      await _getUserType(); // Implement this method based on your app
-
-  if (userType == 'customer') {
-    await CustomerNotificationService.initialize();
-    await CustomerNotificationService.loadStoredNotifications();
-    await CustomerNotificationService.setupFirebaseMessaging();
-    print('Customer notification service initialized');
-  } else if (userType == 'collector') {
-    await NotificationService.initialize();
-    await NotificationService.loadStoredNotifications();
-    await NotificationService.setupFirebaseMessaging();
-    print('Collector notification service initialized');
-  }
-}
-
-// Implement this method based on how you determine user type in your app
-Future<String> _getUserType() async {
-  final prefs = await SharedPreferences.getInstance();
-  return prefs.getString('user_type') ?? 'customer'; // Default to customer
-
-  // Alternative: You might check if user is logged in as customer or collector
-  // Or check from your authentication service
-  // return AuthService.getCurrentUserType();
-}
-
 class EcoLiftApp extends StatelessWidget {
   const EcoLiftApp({super.key});
 
@@ -137,19 +103,18 @@ class EcoLiftApp extends StatelessWidget {
         primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/welcome',
+      initialRoute: '/auth_splash',
       routes: {
+        '/auth_splash': (context) => const AuthSplashScreen(),
         '/welcome': (context) => const WelcomePage(),
         '/about_app': (context) => const AboutApp(),
         '/role_selection': (context) => const RoleSelection(),
-        '/login_role_selection': (context) => const LoginRoleSelection(),
         '/login': (context) => const LoginScreen(),
         '/customer_dashboard': (context) {
           final userData = ModalRoute.of(context)?.settings.arguments
               as Map<String, dynamic>?;
           return CustomerDashboard(userData: userData);
         },
-        '/customer_welcome': (context) => const CustomerWelcome(),
         '/customer_personal_info': (context) => const CustomerPersonalInfo(),
         '/instant_pickup': (context) => const WasteTypeSelection(),
         '/instant_pickup_location': (context) {
@@ -217,7 +182,6 @@ class EcoLiftApp extends StatelessWidget {
           return CustomerRegistrationComplete(customer: customer);
         },
         '/map_location': (context) => const MapLocation(),
-        '/collector_welcome': (context) => const CollectorWelcome(),
         '/collector_personal_info': (context) => const CollectorPersonalInfo(),
         '/collector_vehicle': (context) {
           final args = ModalRoute.of(context)?.settings.arguments

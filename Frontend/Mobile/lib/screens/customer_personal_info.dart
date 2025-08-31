@@ -249,7 +249,7 @@ class _CustomerPersonalInfoState extends State<CustomerPersonalInfo>
                                       recognizer: TapGestureRecognizer()
                                         ..onTap = () {
                                           Navigator.pushNamed(
-                                              context, '/login_role_selection');
+                                              context, '/login');
                                         },
                                     ),
                                   ],

@@ -27,6 +27,7 @@ class _CollectorActivitiesState extends State<CollectorActivities>
 
   late TabController _tabController;
   bool _isInProgressLoading = false;
+  bool _isFirstLoad = true;
 
   late Timer _realtimeTimer;
 
@@ -71,6 +72,7 @@ class _CollectorActivitiesState extends State<CollectorActivities>
           _inProgressPickups = results[1];
           _completedPickups = results[2];
           _isLoading = false;
+          _isFirstLoad = false;
         });
       }
     } catch (e) {
@@ -281,7 +283,7 @@ class _CollectorActivitiesState extends State<CollectorActivities>
               ),
             ),
             Expanded(
-              child: _isLoading
+              child: (_isLoading && _isFirstLoad)
                   ? const Center(
                       child: CircularProgressIndicator(
                         color: Colors.green,

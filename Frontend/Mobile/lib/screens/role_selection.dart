@@ -146,7 +146,7 @@ class _RoleSelectionState extends State<RoleSelection>
                             title: 'Customer',
                             subtitle: 'I want to dispose of my waste',
                             icon: Icons.emoji_people,
-                            route: '/customer_welcome',
+                            route: '/customer_personal_info',
                             color: Colors.green.shade400,
                           ),
                         ),
@@ -160,7 +160,7 @@ class _RoleSelectionState extends State<RoleSelection>
                             title: 'Collector',
                             subtitle: 'I want to collect waste',
                             icon: Icons.local_shipping_rounded,
-                            route: '/collector_welcome',
+                            route: '/collector_personal_info',
                             color: Colors.teal.shade400,
                           ),
                         ),
@@ -223,6 +223,7 @@ class _GlassRoleCardState extends State<_GlassRoleCard> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.route);
     return GestureDetector(
       onTapDown: _onTapDown,
       onTapUp: (details) {

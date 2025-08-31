@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../services/auth_service.dart';
 
 class CustomerProfile extends StatefulWidget {
   final Map<String, dynamic>? userData;
@@ -105,22 +105,6 @@ class _CustomerProfileState extends State<CustomerProfile>
                           ),
                         ),
                         const Spacer(),
-                        IconButton(
-                          onPressed: () {
-                            // TODO: Implement edit profile functionality
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Edit profile coming soon!'),
-                                backgroundColor: Colors.orange,
-                              ),
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -219,20 +203,6 @@ class _CustomerProfileState extends State<CustomerProfile>
                             const SizedBox(height: 16),
 
                             _buildActionCard([
-                              _buildActionRow(
-                                'Change Password',
-                                Icons.lock,
-                                () {
-                                  // TODO: Implement change password
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content:
-                                          Text('Change password coming soon!'),
-                                      backgroundColor: Colors.orange,
-                                    ),
-                                  );
-                                },
-                              ),
                               _buildActionRow(
                                 'Privacy Settings',
                                 Icons.privacy_tip,
@@ -478,9 +448,8 @@ class _CustomerProfileState extends State<CustomerProfile>
             ElevatedButton(
               onPressed: () async {
                 Navigator.of(context).pop();
-                // Clear the authentication token
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.remove('auth_token');
+                // Clear user data using AuthService
+                await AuthService.clearUserData();
                 if (!mounted) return;
                 // Navigate to welcome page
                 Navigator.of(context).pushNamedAndRemoveUntil(

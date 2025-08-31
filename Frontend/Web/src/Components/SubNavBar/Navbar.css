@@ -68,23 +68,53 @@
   color: #2ecc71;
 }
 
-/* Login button special styling */
-.nav-links li:last-child button {
-  background: linear-gradient(45deg, #2ecc71, #3498db);
-  padding: 0.5rem 1.5rem;
-  border-radius: 25px;
-  color: white;
-  transition: all 0.3s ease;
+/* Ensure all buttons have consistent styling */
+.nav-links li button {
+  background: none !important;
+  border: none !important;
+  color: white !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+  padding: 0.5rem 0 !important;
+  position: relative !important;
+  transition: all 0.3s ease !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
-.nav-links li:last-child button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+.nav-links li button:hover {
+  color: #2ecc71 !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
-.nav-links li:last-child button::after {
-  display: none;
+.nav-links li button.active {
+  color: #2ecc71 !important;
 }
+
+/* Login button styling */
+.login-btn {
+  background: linear-gradient(45deg, #2ecc71, #3498db) !important;
+  border: 2px solid transparent !important;
+  color: white !important;
+  font-weight: 600 !important;
+  padding: 0.5rem 1.5rem !important;
+  border-radius: 25px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3) !important;
+}
+
+.login-btn:hover {
+  background: linear-gradient(45deg, #27ae60, #2980b9) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4) !important;
+  color: white !important;
+}
+
+.login-btn::after {
+  display: none !important;
+}
+
 
 .menu-icon {
   display: none;
@@ -145,11 +175,16 @@
     width: 100%;
   }
 
-  .nav-links li:last-child button {
-    width: auto;
-    padding: 0.8rem 2rem;
+  /* Mobile login button styling */
+  .nav-links .login-btn {
+    margin-top: 1rem;
+    padding: 1rem 2rem !important;
+    font-size: 1.1rem !important;
+    width: 80% !important;
+    max-width: 200px;
   }
-  
+
+
   .menu-icon {
     display: flex;
     flex-direction: column;

@@ -16,6 +16,11 @@ export default function SubNavBar() {
         setIsOpen(false); // Close menu on link click
     };
 
+    const handleLoginClick = () => {
+        navigate('/login');
+        setIsOpen(false); // Close menu on link click
+    };
+
     const handleClickOutside = (event) => {
         if (navRef.current && !navRef.current.contains(event.target)) {
             setIsOpen(false);
@@ -38,7 +43,7 @@ export default function SubNavBar() {
                     <li><button className={active === '/OurService' ? 'active' : ''} onClick={() => handleLinkClick('/OurService')}>Our Services</button></li>
                     <li><button className={active === '/AboutUs' ? 'active' : ''} onClick={() => handleLinkClick('/AboutUs')}>About Us</button></li>
                     <li><button className={active === '/Contact' ? 'active' : ''} onClick={() => handleLinkClick('/Contact')}>Contact</button></li>
-                    <li><button className={active === '/Login' ? 'active' : ''} onClick={() => handleLinkClick('/Login')}>Login</button></li>
+                    <li><button className="login-btn" onClick={handleLoginClick}>Login</button></li>
                 </ul>
                 <div className={`menu-icon ${isOpen ? 'open' : ''}`} onClick={toggleMenu}>
                     <span className="bar"></span>

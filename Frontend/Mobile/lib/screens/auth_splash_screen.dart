@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
+import '../services/notification_service.dart';
+import '../services/customer_notification_service.dart';
 
-class CustomerWelcome extends StatefulWidget {
-  const CustomerWelcome({super.key});
+class AuthSplashScreen extends StatefulWidget {
+  const AuthSplashScreen({super.key});
 
   @override
-  State<CustomerWelcome> createState() => _CustomerWelcomeState();
+  State<AuthSplashScreen> createState() => _AuthSplashScreenState();
 }
 
-class _CustomerWelcomeState extends State<CustomerWelcome>
+class _AuthSplashScreenState extends State<AuthSplashScreen>
     with TickerProviderStateMixin {
   late AnimationController _logoController;
   late AnimationController _textController;
@@ -41,10 +44,73 @@ class _CustomerWelcomeState extends State<CustomerWelcome>
       parent: _textController,
       curve: Curves.easeIn,
     );
+
+    _startAnimations();
+    _checkAuthState();
+  }
+
+  void _startAnimations() {
     _logoController.forward();
     Future.delayed(const Duration(milliseconds: 400), () {
       _textController.forward();
     });
+  }
+
+  Future<void> _checkAuthState() async {
+    try {
+      // Wait for animations to complete
+      await Future.delayed(const Duration(milliseconds: 2000));
+
+      if (!mounted) return;
+
+      final authState = await AuthService.checkAuthState();
+
+      if (!mounted) return;
+
+      if (authState['isAuthenticated']) {
+        // User is authenticated, initialize notification services based on user type
+        final userType = authState['userType'];
+        final userData = authState['userData'];
+
+        // Initialize notification services based on user type
+        if (userType == 'customer') {
+          await CustomerNotificationService.initialize();
+          await CustomerNotificationService.loadStoredNotifications();
+          await CustomerNotificationService.setupFirebaseMessaging();
+        } else if (userType == 'collector') {
+          await NotificationService.initialize();
+          await NotificationService.loadStoredNotifications();
+          await NotificationService.setupFirebaseMessaging();
+        }
+
+        if (!mounted) return;
+
+        if (userType == 'customer') {
+          Navigator.pushReplacementNamed(
+            context,
+            '/customer_dashboard',
+            arguments: userData,
+          );
+        } else if (userType == 'collector') {
+          Navigator.pushReplacementNamed(
+            context,
+            '/collector_dashboard',
+            arguments: userData,
+          );
+        } else {
+          // Unknown user type, go to welcome page
+          Navigator.pushReplacementNamed(context, '/welcome');
+        }
+      } else {
+        // User is not authenticated, go to welcome page
+        Navigator.pushReplacementNamed(context, '/welcome');
+      }
+    } catch (e) {
+      // On any error, go to welcome page
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/welcome');
+      }
+    }
   }
 
   @override
@@ -87,8 +153,9 @@ class _CustomerWelcomeState extends State<CustomerWelcome>
                   ),
                   padding: const EdgeInsets.all(32),
                   child: Image.asset(
-                    'assets/images/ecolift_logo_without_name.png',
-                    height: 80,
+                    'assets/images/splash.png',
+                    width: 64,
+                    height: 64,
                   ),
                 ),
               ),
@@ -97,25 +164,24 @@ class _CustomerWelcomeState extends State<CustomerWelcome>
                 position: _textOffsetAnimation,
                 child: FadeTransition(
                   opacity: _textFadeAnimation,
-                  child: Column(
+                  child: const Column(
                     children: [
-                      const Text(
-                        'Welcome to EcoLift',
+                      Text(
+                        'ECO LIFT',
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                           letterSpacing: 1.2,
                         ),
-                        textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 8),
                       Text(
-                        'Join us in making Sri Lanka cleaner and greener. Register now to start managing your waste efficiently.',
-                        textAlign: TextAlign.center,
+                        'Waste to Wonders',
                         style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white.withValues(alpha: 0.85),
+                          fontSize: 18,
+                          color: Colors.white70,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ],
@@ -125,25 +191,8 @@ class _CustomerWelcomeState extends State<CustomerWelcome>
               const SizedBox(height: 48),
               FadeTransition(
                 opacity: _textFadeAnimation,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/customer_personal_info');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.green.shade700,
-                    elevation: 6,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 48, vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    textStyle: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  child: const Text('Get Started'),
+                child: const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
               ),
             ],

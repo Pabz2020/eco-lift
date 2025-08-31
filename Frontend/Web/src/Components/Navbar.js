@@ -38,7 +38,7 @@ const Navbar = () => {
         <div className="contact-info">
           <span>
           <BsFillTelephoneFill/> 
-            +94 123456787
+            +94 764948887
           </span>
           <span>
           <FaLocationDot />

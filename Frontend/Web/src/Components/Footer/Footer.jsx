@@ -25,7 +25,7 @@ const Footer = () => {
                 <div className="footer-section contact-info">
                     <h4>Contact Info</h4>
                     <p><FaMapMarkerAlt /> Hapugala, Galle, Sri Lanka</p>
-                    <p><FaPhone /> +123 456 7890</p>
+                    <p><FaPhone /> +94 764948887</p>
                     <p><FaEnvelope /> ecolift@gmail.com</p>
                 </div>
                 <div className="footer-section follow-us">

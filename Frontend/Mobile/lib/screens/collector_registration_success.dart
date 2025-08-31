@@ -59,7 +59,7 @@ class CollectorRegistrationSuccess extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamedAndRemoveUntil(
                         context,
-                        '/login_role_selection',
+                        '/login',
                         (route) => false,
                       );
                     },

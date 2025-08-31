@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:eco_lift/services/errors.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,7 +27,7 @@ class PickupService {
   ///
   /// The request body is a JSON object with the following structure:
   ///
-  /// 
+  ///
   static Future<void> createInstantPickup({
     required List<String> wasteTypes,
     required double latitude,

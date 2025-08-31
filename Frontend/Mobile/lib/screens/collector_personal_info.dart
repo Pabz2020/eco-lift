@@ -1,4 +1,3 @@
-import 'package:eco_lift/screens/login_role_selection.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -243,16 +242,12 @@ class _CollectorPersonalInfoState extends State<CollectorPersonalInfo>
                             Center(
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const LoginRoleSelection()));
+                                  Navigator.pushNamed(context, '/login');
                                 },
                                 child: RichText(
                                   text: const TextSpan(
                                     text:
-                                        'If you already registered collector ',
+                                        'If you already registered as collector ',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 16,

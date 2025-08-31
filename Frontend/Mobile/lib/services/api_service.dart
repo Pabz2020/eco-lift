@@ -94,8 +94,7 @@ class ApiService {
     }
   }
 
-  Future<Map<String, dynamic>> login(
-      String email, String password, String role) async {
+  Future<Map<String, dynamic>> login(String email, String password) async {
     try {
       String? fcmToken = await getFcmToken();
       print(' login FCM Token: $fcmToken');
@@ -109,7 +108,6 @@ class ApiService {
         body: jsonEncode({
           'email': email,
           'password': password,
-          'role': role,
           'fcmToken': fcmToken,
         }),
       )
@@ -161,12 +159,12 @@ class ApiService {
   // Deprecated: Use login() instead
   Future<Map<String, dynamic>> loginCustomer(
       String email, String password) async {
-    return login(email, password, 'customer');
+    return login(email, password);
   }
 
   // Helper method for collector login
   Future<Map<String, dynamic>> loginCollector(
       String email, String password) async {
-    return login(email, password, 'collector');
+    return login(email, password);
   }
 }
