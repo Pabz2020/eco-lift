@@ -1,0 +1,153 @@
+/* Navbar container */
+.navbar {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+/* Header container */
+.header {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+/* Social Icons */
+.social-icons {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.icon {
+  transition: transform 0.2s ease;
+}
+
+.icon:hover {
+  transform: translateY(-2px);
+}
+
+.icon img {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  filter: grayscale(0.2);
+  transition: all 0.3s ease;
+}
+
+.icon img:hover {
+  opacity: 1;
+  filter: grayscale(0);
+}
+
+/* Contact Information */
+.contact-info {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.contact-info span {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #2c3e50;
+  padding: 0.5rem 1rem;
+  border: 1px solid #28a745;
+  border-radius: 8px;
+  background-color: rgba(40, 167, 69, 0.05);
+  transition: all 0.3s ease;
+}
+
+.contact-info span:hover {
+  background-color: rgba(40, 167, 69, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(40, 167, 69, 0.1);
+}
+
+.contact-info img {
+  width: 16px;
+  height: 16px;
+  margin-right: 0.5rem;
+  opacity: 0.8;
+}
+
+/* Logo Section */
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.logo:hover {
+  color: #28a745;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.75rem 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .contact-info {
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  .contact-info span {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .social-icons {
+    margin: 0.75rem 0;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+/* Scroll Animation */
+.navbar.scrolled {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .navbar {
+    background-color: #1a1a1a;
+  }
+
+  .contact-info span {
+    color: #e0e0e0;
+    border-color: #28a745;
+    background-color: rgba(40, 167, 69, 0.1);
+  }
+
+  .logo {
+    color: #e0e0e0;
+  }
+
+  .navbar.scrolled {
+    background-color: rgba(26, 26, 26, 0.95);
+  }
+}

@@ -1,0 +1,126 @@
+.stat-subtitle {
+    color: #00b894 !important;
+    font-weight: 500 !important;
+}
+
+/* Chart Container */
+.chart-container {
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(20px) !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+}
+
+.card-subtitle {
+    font-weight: 500 !important;
+    color: #636e72 !important;
+}
+
+.stat-icon {
+    width: 60px !important;
+    height: 60px !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(102, 126, 234, 0.5);
+}
+
+.chart-container,
+.stat-card,
+.users-table-container,
+.activity-card,
+.quick-actions-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.stat-card:nth-child(1) { animation-delay: 0.1s; }
+.stat-card:nth-child(2) { animation-delay: 0.2s; }
+.stat-card:nth-child(3) { animation-delay: 0.3s; }
+.stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* User List Cards */
+.user-list-card {
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(20px) !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+    margin-bottom: 20px;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.user-list-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px 0 24px;
+    margin-bottom: 10px;
+}
+
+.user-list-card .card-title {
+    font-weight: 600 !important;
+    color: #2d3436 !important;
+    margin: 0 !important;
+}
+
+.list-icon {
+    width: 40px !important;
+    height: 40px !important;
+    background: linear-gradient(135deg, #00b894 0%, #00cec9 100%) !important;
+}
+
+.list-icon.info {
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%) !important;
+}
+
+.user-list {
+    padding: 0 24px 24px 24px !important;
+}
+
+.user-list-item {
+    padding: 12px 0 !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+.user-list-item:last-child {
+    border-bottom: none !important;
+}
+
+.user-avatar-small {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 14px !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.user-list-text .MuiListItemText-primary {
+    font-weight: 500 !important;
+    color: #2d3436 !important;
+    font-size: 14px !important;
+}
+
+.user-list-text .MuiListItemText-secondary {
+    color: #636e72 !important;
+    font-size: 12px !important;
+}
+
+.vehicle-chip {
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%) !important;
+    color: white !important;
+    font-size: 10px !important;
+    height: 20px !important;
+}
+
+.empty-list-text .MuiListItemText-primary {
+    color: #636e72 !important;
+    font-style: italic !important;
+    text-align: center !important;
+}
+
+.user-lists-section {
+    margin-bottom: 40px;
+} 

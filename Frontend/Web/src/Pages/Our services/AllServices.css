@@ -1,0 +1,112 @@
+.all-services-container {
+    padding: 2rem 4rem;
+    max-width: 900px;
+    margin: 2rem auto;
+    background-color: #1a1a1a;
+    font-family: 'Georgia', serif;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    color: #f0f0f0;
+}
+
+.main-title {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 3rem;
+    color: #f0f0f0;
+    font-weight: bold;
+}
+
+.service-section-full {
+    margin-bottom: 4rem;
+    border-bottom: 1px solid #333;
+    padding-bottom: 2rem;
+}
+
+.service-section-full:last-child {
+    border-bottom: none;
+    margin-bottom: 2rem;
+}
+
+.service-header-full {
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.service-image-full {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+    border: 2px solid #333;
+}
+
+.service-content-full {
+    flex-grow: 1;
+}
+
+.service-title-full {
+    font-size: 2.2rem;
+    color: #4CAF50;
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.service-description-full {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #ccc;
+    text-align: justify;
+}
+
+.back-button-full {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+    color: #f0f0f0;
+}
+
+.back-button-full:hover {
+    background: #333;
+    border-color: #555;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .all-services-container {
+        padding: 2rem;
+    }
+
+    .service-header-full {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .service-title-full {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .all-services-container {
+        padding: 1.5rem;
+    }
+    .main-title {
+        font-size: 2.5rem;
+    }
+    .service-image-full {
+        width: 100%;
+        height: auto;
+    }
+} 
